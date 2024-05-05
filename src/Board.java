@@ -1,4 +1,5 @@
-
+import java.awt.Font;
+import java.awt.FontMetrics;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -31,7 +32,9 @@ public class Board extends JPanel implements ActionListener {
     private int portal2_y = 100;
     private int apple_x = 200;
     private int apple_y = 100;
-    
+
+    private boolean[] enemy_chasing = new boolean[10];    
+    private boolean[] enemy_idle_movements = new boolean[10];    
     private int[] enemy_x_pos = new int[10];
     private int[] enemy_y_pos = new int[10];
     private int   on_ground_enemy = 3; 
@@ -55,6 +58,9 @@ public class Board extends JPanel implements ActionListener {
     private double verticalVelocity = 0.0; // Tracks the player's vertical velocity
             
 
+    private int reset_player_x = player_x;
+    private int reset_player_y = player_y;
+    private int reset_enemys_num = on_ground_enemy;
 
     private boolean inGame = true;
 
@@ -64,7 +70,11 @@ public class Board extends JPanel implements ActionListener {
     private Image portal;
     private Image apple;
     private Image enemy;
-    
+
+    private long lastTime = System.nanoTime();
+    private final long flickerInterval = 500 * 1000000;
+    private boolean showPressSpaceMessage = true;
+
 
     String player_path = "Portal_game/src/new_game_resources/player.png";
     String walls_path  = "Portal_game/src/new_game_resources/wall.png";
@@ -111,8 +121,21 @@ public class Board extends JPanel implements ActionListener {
 
 
     }
-
+    private void reset(){
+        player_x = reset_player_x;
+        player_y = reset_player_y;
+        on_ground_enemy = reset_enemys_num;
+        initGame();
+    }
     private void initGame() {
+        for (int i = 0; i < on_ground_enemy; i++) {
+            if(i%2==0){
+                enemy_idle_movements[i] = true;
+            }else{
+                enemy_idle_movements[i] = false;
+            }
+        }
+        
 
         for (int i = 0; i < wall_lenght; i++) {
             walls_x_pos[i] = i * 20;
@@ -182,10 +205,11 @@ public class Board extends JPanel implements ActionListener {
             
             // Synchronizes the graphics state across different platforms to ensure smooth 
             // rendering
+        }else{
+            gameOver(g);
         }
     }
     private void move() {
-         
         if (leftDirection) {
             player_x -= 1;
         }
@@ -202,9 +226,28 @@ public class Board extends JPanel implements ActionListener {
             player_y += 1;
         }
         player_jump();
-        move_enemy();
+        if (player_y >= enemy_y_pos[0]-40) {
+            move_enemy();    
+        }
+        idle_enemy();
         
     }
+
+    private void idle_enemy(){
+        for (int i = 0; i < on_ground_enemy; i++) {
+            if (enemy_x_pos[i]<=0) enemy_idle_movements[i] = true; 
+            else if(enemy_x_pos[i]>=B_WIDTH)enemy_idle_movements[i]= false;
+
+            if(!enemy_chasing[i]){
+                if (enemy_idle_movements[i]){
+                    enemy_x_pos[i]++;
+                }else{
+                    enemy_x_pos[i]--;
+                }
+            } 
+        }
+    }
+
     private void remove_enemy(int i){
         for (int j = i; j < on_ground_enemy; j++) {
             enemy_x_pos[i] = enemy_x_pos[i+1];
@@ -255,7 +298,7 @@ public class Board extends JPanel implements ActionListener {
 
     }private void move_enemy() {
         // Set the movement speed of the enemies (adjustable value)
-        int enemySpeed = 1;
+        int enemySpeed = 2;
         
         // Set the interaction radius within which enemies should move towards the player
         int interactionRadius = 100;
@@ -271,9 +314,11 @@ public class Board extends JPanel implements ActionListener {
                 if (distance > 0) {
                     // Player is to the right of the enemy; move enemy right
                     enemy_x_pos[i] += enemySpeed;
+                    enemy_chasing[i] = true;
                 } else if (distance < 0) {
                     // Player is to the left of the enemy; move enemy left
                     enemy_x_pos[i] -= enemySpeed;
+                    enemy_chasing[i] = true;
                 }
                 
                 // Ensure the enemy stays within the game boundaries (B_WIDTH)
@@ -282,7 +327,10 @@ public class Board extends JPanel implements ActionListener {
                 } else if (enemy_x_pos[i] > B_WIDTH - 20) {
                     enemy_x_pos[i] = B_WIDTH - 20;
                 }
+            }else{
+                enemy_chasing[i] = false;
             }
+        
         }
     }
     
@@ -383,6 +431,7 @@ public class Board extends JPanel implements ActionListener {
             player_x = portal2_x + (player_x - portal1_x);
             player_y = portal2_y + (player_y - portal1_y);
             justTeleported = true;
+        
         }
     
         // Teleport player from portal2 to portal1
@@ -402,6 +451,38 @@ public class Board extends JPanel implements ActionListener {
     }
     
 
+    private void gameOver(Graphics g) {
+        String gameOverMsg = "Game Over";
+        String pressSpaceMsg = "Press Space to Restart";
+        Font smallFont = new Font("Vibes", Font.BOLD, 30);
+        Font pressSpaceFont = new Font("Vibes", Font.PLAIN, 20); // Adjust the font size as needed
+        FontMetrics metrics = getFontMetrics(smallFont);
+    
+        // Draw the "Game Over" message
+        g.setColor(Color.red);
+        g.setFont(smallFont);
+        g.drawString(gameOverMsg, (B_WIDTH - metrics.stringWidth(gameOverMsg)) / 2, B_HEIGHT / 2);
+    
+        // Calculate time elapsed since last flicker change
+        long now = System.nanoTime();
+        long elapsed = now - lastTime;
+    
+        if (elapsed > flickerInterval) {
+            showPressSpaceMessage = !showPressSpaceMessage;
+            lastTime = now;
+        }
+    
+        if (showPressSpaceMessage) {
+            g.setFont(pressSpaceFont);
+            FontMetrics pressSpaceMetrics = getFontMetrics(pressSpaceFont);
+            g.drawString(pressSpaceMsg, (B_WIDTH - pressSpaceMetrics.stringWidth(pressSpaceMsg)) / 2,
+                    (B_HEIGHT / 2) + pressSpaceMetrics.getHeight() + 10); // Adjust the position as needed
+        }
+    
+        repaint(); // Trigger repaint to update the display
+
+    }
+    
     @Override
     public void actionPerformed(ActionEvent e) {
 
@@ -446,7 +527,10 @@ public class Board extends JPanel implements ActionListener {
                     leftDirection = false;
                 }
             } else if (key == KeyEvent.VK_SPACE) {
-                
+                if (!inGame) {
+                    reset();
+                    inGame=true;
+                }            
                 if (jumpCount < 1) {
                     isJumping = true;
                     verticalVelocity = jumpSpeed; // Set the initial upward speed
