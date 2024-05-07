@@ -9,7 +9,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.util.Arrays;
+
 import java.util.Random;
 
 import javax.swing.ImageIcon;
@@ -22,7 +22,7 @@ public class Board extends JPanel implements ActionListener {
 
     private final int B_WIDTH  = 1300;
     private final int B_HEIGHT = 710;
-    private final int DELAY    = 10;
+    private final int DELAY    = 5;
     private int floor = (B_WIDTH/20);
     private int player_x = 10;
     private int player_y = 650;
@@ -33,11 +33,12 @@ public class Board extends JPanel implements ActionListener {
     private int apple_x = 200;
     private int apple_y = 100;
 
-    private boolean[] enemy_chasing = new boolean[10];    
-    private boolean[] enemy_idle_movements = new boolean[10];    
-    private int[] enemy_x_pos = new int[10];
-    private int[] enemy_y_pos = new int[10];
-    private int   on_ground_enemy = 3; 
+    private int max_enemies = 500;
+    private boolean[] enemy_chasing = new boolean[max_enemies];    
+    private boolean[] enemy_idle_movements = new boolean[max_enemies];    
+    private int[] enemy_x_pos = new int[max_enemies];
+    private int[] enemy_y_pos = new int[max_enemies];
+    private int   on_ground_enemy = 100; 
 
     private int[] walls_x_pos = new int[600];
     private int[] walls_y_pos = new int[600];
@@ -46,7 +47,7 @@ public class Board extends JPanel implements ActionListener {
     private int jumpCount = 0;
     private int floating_floor = 200;
 
-    public boolean level_2 = false;
+    public boolean restart = false;
     private boolean justTeleported = false;
     private boolean leftDirection = false;
     private boolean rightDirection = false;
@@ -95,7 +96,7 @@ public class Board extends JPanel implements ActionListener {
         addKeyListener(new TAdapter());
         setBackground(Color.black);
         setFocusable(true);
-
+        
         setPreferredSize(new Dimension(B_WIDTH, B_HEIGHT));
         loadImages();
         initGame();
@@ -209,6 +210,7 @@ public class Board extends JPanel implements ActionListener {
             gameOver(g);
         }
     }
+
     private void move() {
         if (leftDirection) {
             player_x -= 1;
@@ -235,8 +237,24 @@ public class Board extends JPanel implements ActionListener {
 
     private void idle_enemy(){
         for (int i = 0; i < on_ground_enemy; i++) {
+            for (int j = 0; j < on_ground_enemy; j++) {
+                if (enemy_x_pos[i]<0 || enemy_x_pos[j]<0) continue;
+                
+                int enemy_1_right = enemy_x_pos[i]+20;
+                int enemy_2_right = enemy_x_pos[j]+20;
+
+                if (enemy_1_right==enemy_x_pos[j]){
+                    enemy_idle_movements[i] = false;
+                    enemy_idle_movements[j] = true;
+                }
+                else if(enemy_x_pos[i]==enemy_2_right){
+                    enemy_idle_movements[i]= true;
+                    enemy_idle_movements[j] = false;
+                }
+            
+            }
             if (enemy_x_pos[i]<=0) enemy_idle_movements[i] = true; 
-            else if(enemy_x_pos[i]>=B_WIDTH)enemy_idle_movements[i]= false;
+            else if(enemy_x_pos[i]>=B_WIDTH-20)enemy_idle_movements[i]= false;
 
             if(!enemy_chasing[i]){
                 if (enemy_idle_movements[i]){
@@ -249,11 +267,14 @@ public class Board extends JPanel implements ActionListener {
     }
 
     private void remove_enemy(int i){
-        for (int j = i; j < on_ground_enemy; j++) {
-            enemy_x_pos[i] = enemy_x_pos[i+1];
-            enemy_y_pos[i] = enemy_y_pos[i+1];
-        }
-        on_ground_enemy--;
+        // for (int j = i; j < on_ground_enemy; j++) {
+        //     enemy_x_pos[i] = enemy_x_pos[i+1];
+        //     enemy_y_pos[i] = enemy_y_pos[i+1];
+        // }
+        enemy_x_pos[i] = -20;
+        enemy_y_pos[i] = -20;
+    
+        // on_ground_enemy--;
     }
     private void player_jump(){
         for(int i=0;i<wall_lenght;i++) {
@@ -487,8 +508,10 @@ public class Board extends JPanel implements ActionListener {
     public void actionPerformed(ActionEvent e) {
 
         if (inGame) {
+            if (restart) {
+                inGame = false;
+            }
             checkCollision();
-
             move();
 
         }
@@ -536,7 +559,9 @@ public class Board extends JPanel implements ActionListener {
                     verticalVelocity = jumpSpeed; // Set the initial upward speed
                     jumpCount++; // Increment the jump count
                 }
-        }
+            }else if (key == KeyEvent.VK_ESCAPE){
+                restart = true;
+            }
     }
         @Override
         public void keyReleased(KeyEvent e) {
@@ -563,6 +588,9 @@ public class Board extends JPanel implements ActionListener {
                 case KeyEvent.VK_SPACE:
                     // Reset jump flag
                     isJumping = false;
+                    break;
+                case KeyEvent.VK_ESCAPE:
+                    restart = false;
                     break;
                 default:
                     // Handle other key releases if necessary
