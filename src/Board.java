@@ -9,7 +9,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-
 import java.util.Random;
 
 import javax.swing.ImageIcon;
@@ -38,7 +37,7 @@ public class Board extends JPanel implements ActionListener {
     private boolean[] enemy_idle_movements = new boolean[max_enemies];    
     private int[] enemy_x_pos = new int[max_enemies];
     private int[] enemy_y_pos = new int[max_enemies];
-    private int   on_ground_enemy = 100; 
+    private int   on_ground_enemy = 10; 
 
     private int[] walls_x_pos = new int[600];
     private int[] walls_y_pos = new int[600];
@@ -71,6 +70,7 @@ public class Board extends JPanel implements ActionListener {
     private Image portal;
     private Image apple;
     private Image enemy;
+    private Image backgroundImage;
 
     private long lastTime = System.nanoTime();
     private final long flickerInterval = 500 * 1000000;
@@ -82,7 +82,7 @@ public class Board extends JPanel implements ActionListener {
     String portal_path = "Portal_game/src/new_game_resources/portal.png";
     String apple_path  = "Portal_game/src/new_game_resources/apple.png";
     String enemy_path  = "Portal_game/src/new_game_resources/enemy.jpeg";
-
+    String backgroundImage_path = "Portal_game\\src\\new_game_resources\\bg.jpg";
     public Board() {
         
         initBoard();
@@ -120,6 +120,8 @@ public class Board extends JPanel implements ActionListener {
         ImageIcon iien = new ImageIcon(enemy_path);
         enemy = iien.getImage();
 
+        ImageIcon iibg = new ImageIcon(backgroundImage_path);
+        backgroundImage = iibg.getImage();
 
     }
     private void reset(){
@@ -157,6 +159,14 @@ public class Board extends JPanel implements ActionListener {
         }
         wall_lenght += 10;
 
+        int l = 0; 
+        for (int i = wall_lenght; i < wall_lenght+10; i++) {
+            walls_x_pos[i] = 800 + (20 * ++l);
+            walls_y_pos[i] = 220;
+        }
+        wall_lenght += 10;
+        
+
         initialize_enemys();
         timer = new Timer(DELAY,this);
         timer.start();
@@ -164,7 +174,9 @@ public class Board extends JPanel implements ActionListener {
 
     @Override
     public void paintComponent(Graphics g) {
+
         super.paintComponent(g);
+        g.drawImage(backgroundImage, 0, 0, this);
 
         doDrawing(g);
     }
@@ -329,24 +341,17 @@ public class Board extends JPanel implements ActionListener {
             // Calculate the horizontal distance between the player and the enemy
             int distance = player_x - enemy_x_pos[i];
             
-            // Check if the enemy is within the interaction radius of the player
-            if (Math.abs(distance) <= interactionRadius) {
-                // Move the enemy towards the player based on the distance
-                if (distance > 0) {
-                    // Player is to the right of the enemy; move enemy right
-                    enemy_x_pos[i] += enemySpeed;
-                    enemy_chasing[i] = true;
-                } else if (distance < 0) {
-                    // Player is to the left of the enemy; move enemy left
-                    enemy_x_pos[i] -= enemySpeed;
-                    enemy_chasing[i] = true;
-                }
-                
-                // Ensure the enemy stays within the game boundaries (B_WIDTH)
-                if (enemy_x_pos[i] < 0) {
-                    enemy_x_pos[i] = 0;
-                } else if (enemy_x_pos[i] > B_WIDTH - 20) {
-                    enemy_x_pos[i] = B_WIDTH - 20;
+            if (player_y == B_HEIGHT - 40) {
+                // Only chase player when they are on the ground
+                if (Math.abs(distance) <= interactionRadius) {
+                    // Move the enemy towards the player based on the distance
+                    if (distance > 0) {
+                        enemy_x_pos[i] += enemySpeed;
+                        enemy_chasing[i] = true;
+                    } else if (distance < 0) {
+                        enemy_x_pos[i] -= enemySpeed;
+                        enemy_chasing[i] = true;
+                    }
                 }
             }else{
                 enemy_chasing[i] = false;
@@ -385,14 +390,24 @@ public class Board extends JPanel implements ActionListener {
                     remove_enemy(i);
             }
         }
-    }        
+    }   
+    private void apple_check(){
+        if (apple_x<=player_x+20 && apple_x>=player_x && apple_y<=player_y+20 && apple_y>=player_y) {
+            Random r = new Random();
+            int rangeSize_x = B_WIDTH-20 - 20 + 1;
+            int rangeSize_y = B_HEIGHT-20 - 20 +1;
+            
+            apple_x = r.nextInt(rangeSize_x) + 20;
+            apple_y = r.nextInt(rangeSize_y) + 20;
+        }
+    }     
     private void checkCollision() {
         if (player_y >= B_HEIGHT - 20) {
             // Reset the player's position if they hit the ground
             player_y = B_HEIGHT - 20;
             verticalVelocity = 0.0; // Reset vertical velocity
         }
-
+        apple_check();
         if (player_y >= B_HEIGHT) {
             player_y = B_HEIGHT;
         }
