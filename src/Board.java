@@ -77,12 +77,12 @@ public class Board extends JPanel implements ActionListener {
     private boolean showPressSpaceMessage = true;
 
 
-    String player_path = "Portal_game/src/new_game_resources/player.png";
-    String walls_path  = "Portal_game/src/new_game_resources/wall.png";
-    String portal_path = "Portal_game/src/new_game_resources/portal.png";
-    String apple_path  = "Portal_game/src/new_game_resources/apple.png";
-    String enemy_path  = "Portal_game/src/new_game_resources/enemy.jpeg";
-    String backgroundImage_path = "Portal_game\\src\\new_game_resources\\bg.jpg";
+    String player_path = "Portal-game/src/new_game_resources/player.png";
+    String walls_path  = "Portal-game/src/new_game_resources/wall.png";
+    String portal_path = "Portal-game/src/new_game_resources/portal.png";
+    String apple_path  = "Portal-game/src/new_game_resources/apple.png";
+    String enemy_path  = "Portal-game/src/new_game_resources/enemy.jpeg";
+    String backgroundImage_path = "Portal-game\\src\\new_game_resources\\bg.jpeg";
     public Board() {
         
         initBoard();
