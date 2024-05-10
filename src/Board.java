@@ -392,7 +392,7 @@ public class Board extends JPanel implements ActionListener {
         }
     }   
     private void apple_check(){
-        if (apple_x<=player_x+20 && apple_x>=player_x && apple_y<=player_y+20 && apple_y>=player_y) {
+        if (apple_x<=player_x+20 && apple_x+10>=player_x && apple_y<=player_y+20 && apple_y+10>=player_y) {
             Random r = new Random();
             int rangeSize_x = B_WIDTH-20 - 20 + 1;
             int rangeSize_y = B_HEIGHT-20 - 20 +1;
