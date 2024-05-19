@@ -9,7 +9,7 @@ Portal Game is a Java-based 2D platformer game in which players navigate through
 - [Installation](#installation)
 - [How to Play](#how-to-play)
 - [Game Controls](#game-controls)
-- [License](#license)
+- [Gameplay](#Gameplay)
 - [Screenshots](#screenshots)
 
 ## Game Overview
@@ -59,9 +59,10 @@ In Portal Game, players control a character that can move left, right, jump, and
 - **Move Right**: Press the `Right Arrow` key.
 - **Jump**: Press the `Up Arrow` key or the `Space` bar.
 
-## License
+## Gameplay
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+Watch the full gameplay video on YouTube:
+https://youtu.be/jZCNiVX3_Us
 
 ## Screenshots
 
