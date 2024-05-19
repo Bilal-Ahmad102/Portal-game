@@ -49,7 +49,7 @@ In Portal Game, players control a character that can move left, right, jump, and
 
 - Control your character using the arrow keys.
 - Avoid enemies and obstacles.
-- jump on head of enemies to kill them.
+- Jump on the heads of enemies to defeat them.
 - Use portals to teleport to different areas of the level.
 
 ## Game Controls
@@ -58,3 +58,23 @@ In Portal Game, players control a character that can move left, right, jump, and
 - **Move Right**: Press the `Right Arrow` key.
 - **Jump**: Press the `Up Arrow` key or the `Space` bar.
 
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+---
+
+### Screenshots
+
+Here are some screenshots of the Portal Game in action:
+
+![Screenshot 1]Portal-game/src/new_game_resources/player.png)
+*Character navigating through the level using portals.*
+
+![Screenshot 2](path_to_screenshot2.png)
+*Collecting apples while avoiding enemies and obstacles.*
+
+![Screenshot 3](path_to_screenshot3.png)
+*Teleporting to different areas of the level using portals.*
+
+Make sure to replace `path_to_screenshot1.png`, `path_to_screenshot2.png`, and `path_to_screenshot3.png` with the actual paths to your screenshots. This will help illustrate the game’s features and gameplay effectively.
