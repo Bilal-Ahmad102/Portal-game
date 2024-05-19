@@ -79,5 +79,5 @@ Here are some screenshots of the Portal Game in action:
 ![Screenshot 4](https://github.com/Bilal-Ahmad102/Portal_game/raw/main/screenshots/screenshot4.png)
 *Player in the air.*
 
-![Screenshot 5]([https://github.com/Bilal-Ahmad102/Portal_game/raw/main/screenshots/screenshot5.png](https://github.com/Bilal-Ahmad102/Portal-game/blob/main/src/new_game_resources/Screenshot%20(316).png))
+![Screenshot 5](https://github.com/Bilal-Ahmad102/Portal-game/blob/main/src/new_game_resources/Screenshot%20(316).png)
 *Player on ledge.*
