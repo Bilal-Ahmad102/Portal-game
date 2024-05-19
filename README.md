@@ -67,16 +67,16 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 Here are some screenshots of the Portal Game in action:
 
-![Screenshot 1](https://github.com/Bilal-Ahmad102/Portal_game/raw/main/screenshots/screenshot1.png)
+![Screenshot 1](https://github.com/Bilal-Ahmad102/Portal-game/blob/main/src/new_game_resources/Screenshot%20(320).png)
 *Character navigating through the level using portals.*
 
-![Screenshot 2](https://github.com/Bilal-Ahmad102/Portal_game/raw/main/screenshots/screenshot2.png)
+![Screenshot 2](https://github.com/Bilal-Ahmad102/Portal-game/blob/main/src/new_game_resources/Screenshot%20(318).png)
 *Collecting apples while avoiding enemies and obstacles.*
 
-![Screenshot 3](https://github.com/Bilal-Ahmad102/Portal_game/raw/main/screenshots/screenshot3.png)
+![Screenshot 3](https://github.com/Bilal-Ahmad102/Portal-game/blob/main/src/new_game_resources/Screenshot%20(317).png)
 *Game Over Screen.*
 
-![Screenshot 4](https://github.com/Bilal-Ahmad102/Portal_game/raw/main/screenshots/screenshot4.png)
+![Screenshot 4](https://github.com/Bilal-Ahmad102/Portal-game/blob/main/src/new_game_resources/Screenshot%20(319).png)
 *Player in the air.*
 
 ![Screenshot 5](https://github.com/Bilal-Ahmad102/Portal-game/blob/main/src/new_game_resources/Screenshot%20(316).png)
