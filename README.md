@@ -10,6 +10,7 @@ Portal Game is a Java-based 2D platformer game in which players navigate through
 - [How to Play](#how-to-play)
 - [Game Controls](#game-controls)
 - [License](#license)
+- [Screenshots](#screenshots)
 
 ## Game Overview
 
@@ -62,25 +63,21 @@ In Portal Game, players control a character that can move left, right, jump, and
 
 This project is licensed under the MIT License - see the LICENSE file for details.
 
----
-
-### Screenshots
+## Screenshots
 
 Here are some screenshots of the Portal Game in action:
 
-![Screenshot 1](Portal-game/src/new_game_resources/Screenshot%20(320).png)
+![Screenshot 1](https://github.com/Bilal-Ahmad102/Portal_game/raw/main/screenshots/screenshot1.png)
 *Character navigating through the level using portals.*
 
-![Screenshot 2](Portal-game/src/new_game_resources/Screenshot%20(319).png)
+![Screenshot 2](https://github.com/Bilal-Ahmad102/Portal_game/raw/main/screenshots/screenshot2.png)
 *Collecting apples while avoiding enemies and obstacles.*
 
-![Screenshot 3](Portal-game/src/new_game_resources/Screenshot%20(317).png)
+![Screenshot 3](https://github.com/Bilal-Ahmad102/Portal_game/raw/main/screenshots/screenshot3.png)
 *Game Over Screen.*
 
-![Screenshot 4](Portal-game/src/new_game_resources/Screenshot%20(319).png)
+![Screenshot 4](https://github.com/Bilal-Ahmad102/Portal_game/raw/main/screenshots/screenshot4.png)
 *Player in the air.*
 
-![Screenshot 5](Portal-game/src/new_game_resources/Screenshot%20(316).png)
+![Screenshot 5](https://github.com/Bilal-Ahmad102/Portal_game/raw/main/screenshots/screenshot5.png)
 *Player on ledge.*
-
-These screenshots showcase the game's features and gameplay effectively. Make sure the paths to the screenshots are correct for them to display properly.
