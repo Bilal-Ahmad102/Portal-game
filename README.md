@@ -68,19 +68,19 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 Here are some screenshots of the Portal Game in action:
 
-![Screenshot 1](path_toPortal-game\src\new_game_resources\Screenshot (320).png)
+![Screenshot 1](Portal-game/src/new_game_resources/Screenshot%20(320).png)
 *Character navigating through the level using portals.*
 
-![Screenshot 2](Portal-game\src\new_game_resources\Screenshot (319).png)
+![Screenshot 2](Portal-game/src/new_game_resources/Screenshot%20(319).png)
 *Collecting apples while avoiding enemies and obstacles.*
 
-![Screenshot 3](Portal-game\src\new_game_resources\Screenshot (317).png)
+![Screenshot 3](Portal-game/src/new_game_resources/Screenshot%20(317).png)
 *Game Over Screen.*
 
-![Screenshot 4](Portal-game\src\new_game_resources\Screenshot (319).png)
-*Player IN AIR.*
+![Screenshot 4](Portal-game/src/new_game_resources/Screenshot%20(319).png)
+*Player in the air.*
 
-![Screenshot 5](Portal-game\src\new_game_resources\Screenshot (316).png)
+![Screenshot 5](Portal-game/src/new_game_resources/Screenshot%20(316).png)
 *Player on ledge.*
 
-Make sure to replace `path_to_screenshot1.png`, `path_to_screenshot2.png`, and `path_to_screenshot3.png` with the actual paths to your screenshots. This will help illustrate the game’s features and gameplay effectively.
+These screenshots showcase the game's features and gameplay effectively. Make sure the paths to the screenshots are correct for them to display properly.
