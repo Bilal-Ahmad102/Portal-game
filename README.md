@@ -25,13 +25,13 @@ In Portal Game, players control a character that can move left, right, jump, and
 1. Clone the repository to your local machine:
 
     ```bash
-    git clone https://github.com/Bilal-Ahmad102/Portal_game.git
+    git clone https://github.com/Bilal-Ahmad102/Portal-game.git
     ```
 
 2. Navigate to the cloned repository directory:
 
     ```bash
-    cd Portal_game
+    cd Portal-game
     ```
 
 3. Compile the Java files:
