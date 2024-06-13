@@ -1,9 +1,7 @@
-
 import java.awt.Image;
 import javax.swing.ImageIcon;
 
-
-public class Walls {
+public class Walls  {
 
 
     private final int B_WIDTH  = 1300;
@@ -16,7 +14,7 @@ public class Walls {
     
     private int floating_floor = 200;
 
-    private Image wall; 
+    private transient  Image wall; 
 
 
     String walls_path  = "Portal-game/src/new_game_resources/wall.png";
@@ -77,6 +75,9 @@ public class Walls {
         return walls_y_pos;
     }
     public Image get_wall_Image(){
+        if(wall == null){
+            loadImages();
+        }
         return wall;
     }
     public int wall_lenght(){

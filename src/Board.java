@@ -1,35 +1,23 @@
-import java.awt.Font;
-import java.awt.FontMetrics;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Image;
-import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import javax.swing.ImageIcon;
-import javax.swing.JPanel;
-import javax.swing.Timer;
-
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
 public class Board extends JPanel implements ActionListener {
-
-    private final int B_WIDTH  = 1300;
+    
+    private final int B_WIDTH = 1300;
     private final int B_HEIGHT = 710;
-    private final int DELAY    = 10;
+    private final int DELAY = 10;
 
     public boolean restart = false;
     private boolean inGame = true;
-    private int score = 0; // Add score variable
 
-    private Timer timer;
-    private Image backgroundImage;
+    private transient Timer timer;
+    private transient Image backgroundImage;
 
     private long lastTime = System.nanoTime();
     private final long flickerInterval = 500 * 1000000;
     private boolean showPressSpaceMessage = true;
 
+    Score s;
     Player p;
     Enemy e;
     Walls w;
@@ -38,21 +26,23 @@ public class Board extends JPanel implements ActionListener {
 
     String backgroundImage_path = "Portal-game/src/new_game_resources/bg.jpeg";
 
-    public Board() {
+    public Board(Player p,Enemy e,Walls w,Portals pt,Apple a,Score s) {
+        this.p  = p;
+        this.e  = e;
+        this.w  = w;
+        this.pt = pt;
+        this.a  = a;
+        this.s = s;
+
         initBoard();
     }
 
     private void initBoard() {
-        p = new Player();
-        e = new Enemy(p.get_player_x(), B_WIDTH, B_HEIGHT);
-        w = new Walls();
-        pt = new Portals();
-        a = new Apple();
 
         addKeyListener(new TAdapter());
         setBackground(Color.black);
         setFocusable(true);
-        
+
         setPreferredSize(new Dimension(B_WIDTH, B_HEIGHT));
         loadImages();
         initGame();
@@ -66,12 +56,12 @@ public class Board extends JPanel implements ActionListener {
     private void reset() {
         p.set_player_pos();
         e.reset();
-        score = 0; // Reset score
+        s.reset();
         initGame();
     }
 
     private void initGame() {
-        e.initGame(p.get_player_x(), B_WIDTH, B_HEIGHT);        
+        e.initGame(p.get_player_x(), B_WIDTH, B_HEIGHT);
         w.initGame();
         timer = new Timer(DELAY, this);
         timer.start();
@@ -102,34 +92,26 @@ public class Board extends JPanel implements ActionListener {
             g.drawImage(pt.get_portal_Image(), ps[2], ps[3], this);
             g.drawImage(pt.get_portal_Image(), ps[0], ps[1], this);
             g.drawImage(p.get_player_Image(), p.get_player_x(), p.get_player_y(), this);
-            
+
             int p_x;
             int p_y;
             int[] pt_pos = pt.mirror_image(p.get_player_x(), p.get_player_y());
-            p_x = pt_pos[0]; p_y = pt_pos[1];
+            p_x = pt_pos[0];
+            p_y = pt_pos[1];
 
             if (p_x != p.get_player_x()) {
                 g.drawImage(p.get_player_Image(), p_x, p_y, this);
             }
 
             // Draw the scoreboard
-            drawScoreboard(g);
-            
+            s.drawScoreboard(g);
+
             Toolkit.getDefaultToolkit().sync();
         } else {
             gameOver(g);
         }
     }
 
-    private void drawScoreboard(Graphics g) {
-        g.setColor(new Color(255, 0, 0, 200)); // Red color with transparency
-        g.setFont(new Font("Helvetica", Font.BOLD, 30));
-        String scoreText = "Score: " + score;
-        FontMetrics metrics = getFontMetrics(g.getFont());
-        int x = (B_WIDTH - metrics.stringWidth(scoreText)) / 2;
-        int y = metrics.getHeight() + 20;
-        g.drawString(scoreText, x, y);
-    }
 
     private void move() {
         p.move(w.get_wall_x(), w.get_walls_y(), w.wall_lenght());
@@ -145,7 +127,7 @@ public class Board extends JPanel implements ActionListener {
         p.checkCollision(p1_x, p1_y, p2_x, p2_y);
 
         int newPoints = a.apple_check(p.get_player_x(), p.get_player_y(), w.get_wall_x(), w.get_walls_y(), w.wall_lenght());
-        score += newPoints; // Update score
+        s.increaseScore(newPoints);
 
         e.checkCollision(p.get_player_x(), p.get_player_y());
         if (p.enemy_collision(e.get_enemy_x(), e.get_enemy_y(), e.get_on_ground_enemys())) {
@@ -215,6 +197,8 @@ public class Board extends JPanel implements ActionListener {
                 p.space_jump();
             } else if (key == KeyEvent.VK_ESCAPE) {
                 restart = true;
+            }else if(key == KeyEvent.VK_S){
+                p.save_game(true);
             }
         }
 
@@ -234,6 +218,9 @@ public class Board extends JPanel implements ActionListener {
                     break;
                 case KeyEvent.VK_ESCAPE:
                     restart = false;
+                    break;
+                case KeyEvent.VK_S:
+                    p.save_game(false);
                     break;
                 default:
                     break;
