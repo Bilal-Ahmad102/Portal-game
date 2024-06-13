@@ -1,5 +1,7 @@
 import java.awt.Dimension;
 import java.awt.EventQueue;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.io.*;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -17,6 +19,7 @@ public class Portal extends JFrame {
     private Walls walls;
     private Apple apple;
     private Score score;
+    private Snake snake;
 
     private boolean do_save_game; // Flag to determine if game should be saved
 
@@ -38,10 +41,15 @@ public class Portal extends JFrame {
         if (score == null) {
             score = new Score();
         }
-
-        portals = new Portals();
-        walls = new Walls();
-
+        if (snake == null) {
+            snake = new Snake();
+        }
+        if (portals == null) {
+            portals = new Portals();
+        }
+        if (walls == null) {
+            walls = new Walls();
+        }
     }
 
     private void initUI() {
@@ -52,13 +60,27 @@ public class Portal extends JFrame {
         JButton singlePlayerButton = new JButton("Single Player");
         singlePlayerButton.addActionListener(e -> {
             initGameComponents(); // Initialize game components if starting a new game
-            add(new Board(player, enemy, walls, portals, apple,score));
             getContentPane().remove(panel);
+            Board board = new Board(player, enemy, walls, portals, apple, score);
+            add(board);
+            board.requestFocusInWindow(); // Ensure the board can receive key events
+            pack();
+            startGameLoop(); // Start the game loop
+        });
+
+        JButton snakeVSboxButton = new JButton("Snake VS Box");
+        snakeVSboxButton.addActionListener(e -> {
+            initGameComponents(); // Initialize game components if starting a new game
+            getContentPane().remove(panel);
+            Snake_vs_box snakeVsBox = new Snake_vs_box(player, enemy, walls, portals, apple, score, snake);
+            add(snakeVsBox);
+            snakeVsBox.requestFocusInWindow(); // Ensure the panel can receive key events
             pack();
             startGameLoop(); // Start the game loop
         });
 
         panel.add(singlePlayerButton);
+        panel.add(snakeVSboxButton);
 
         setTitle("Portal");
         setSize(600, 600);
@@ -86,6 +108,9 @@ public class Portal extends JFrame {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
+
+                // Repaint the game to update the display
+                repaint();
             }
         }).start();
     }
